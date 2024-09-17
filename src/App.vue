@@ -1,26 +1,33 @@
 <script>
-/* 
-  Per importare ed utilizzare un componente dentro un altro devo SEMPRE seguire questi 3 passi:
-  1) Importazione del componente
-  2) Dichiarazione del componente
-  3) Utilizzo del componente
-*/
-// 1) Importazione del componente
+import axios from 'axios';
 import AppHeader from './components/AppHeader.vue';
 
 export default {
   data() {
     return { 
-      count: 0
+      searchText: '',
+      apiKey: '5478ac7f2d33ff40208455fe556ca0c3',
+      movies: [],
+      series: []
     }
   },
-  // 2) Dichiarazione del componente
   components: {
     AppHeader
   },
   methods: {
-    incrementCount() {
-      this.count++;
+    search() {
+      axios  //chiamata api
+      .get('https://api.themoviedb.org/3/search/movie', {
+        params: {
+          api_key: this.apiKey,
+          query: this.searchText,
+        }
+      })
+      .then((resp) => {
+        console.log(resp.data);
+        //salvo i dati restituiti in array
+        this.movies = resp.data.results;
+      });
     }
   }
 }
@@ -28,13 +35,39 @@ export default {
 
 <template>
   <div>
-    <!-- 3) Utilizzo del componente -->
+   
     <AppHeader />
     
     <main>
-      <button class="btn btn-primary" @click="incrementCount()">
-        {{ count }}
-      </button>
+      <div>
+        <input v-model="searchText" type="text" placeholder="Cerca film o serie TV">
+        <button @click="search">
+          Cerca
+        </button>
+      </div>
+
+      <div>
+        <ol>
+          <li v-for="(movie, i) in movies " :key="i">
+            <ul>
+              <li>
+                Titolo: {{ movie.title }}
+              </li>
+              <li>
+                Titolo originale: {{ movie.original_title }}
+              </li>
+              <li>
+                Lingua: {{ movie.original_language }}
+              </li>
+              <li>
+                voto: {{ movie.vote_average }}
+              </li>
+
+            </ul>
+            <hr>
+          </li>
+        </ol>
+      </div>
     </main>
   </div>
 </template>
