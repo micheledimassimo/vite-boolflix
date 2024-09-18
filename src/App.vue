@@ -8,7 +8,9 @@ export default {
       searchText: '',
       apiKey: '5478ac7f2d33ff40208455fe556ca0c3',
       movies: [],
-      series: []
+      series: [],
+      basicImgUrl: 'https://image.tmdb.org/t/p/',
+      basicImgSize: 'w185'
     }
   },
   components: {
@@ -42,6 +44,7 @@ export default {
       });
     },
     getFlags(lang) {
+      //funzione per cambiare le lingue in bandiere
       const languages = [
         'en',
         'it',
@@ -92,17 +95,24 @@ export default {
           <li v-for="(movie, i) in movies " :key="i">
             <ul>
               <li>
+                <img :src="basicImgUrl + basicImgSize + movie.poster_path" :alt="movie.title">
+              </li>
+              <li>
                 Titolo: {{ movie.title }}
               </li>
               <li>
                 Titolo originale: {{ movie.original_title }}
               </li>
               <li>
-                Lingua: <img :src="getFlags(movie.original_language)" alt="">
+                Lingua: <img class="flag-img" :src="getFlags(movie.original_language)" alt="">
               </li>
-              <li>
-                voto: {{ movie.vote_average }}
-              </li>
+              <div>
+                  Voto: {{ Math.ceil(movie.vote_average / 2) }}
+              </div>
+              <div>
+                <i v-for="x in ( Math.ceil(movie.vote_average / 2)) " :key="x" class="fa-solid fa-star"></i>
+                <i v-for="x in (5 - Math.ceil(movie.vote_average / 2)) " :key="x" class="fa-regular fa-star"></i>
+              </div>
 
             </ul>
             <hr>
@@ -119,16 +129,25 @@ export default {
           <li v-for="(serie, i) in series " :key="i">
             <ul>
               <li>
+                <img :src="basicImgUrl + basicImgSize + serie.poster_path" :alt="serie.title">
+              </li>
+              <li>
                 Titolo: {{ serie.name }}
               </li>
               <li>
                 Titolo originale: {{ serie.original_name }}
               </li>
               <li>
-                Lingua: <img :src="getFlags(serie.original_language)" alt="">
+                Lingua: <img class="flag-img" :src="getFlags(serie.original_language)" alt="">
               </li>
               <li>
-                voto: {{ serie.vote_average }}
+                <div>
+                  Voto: {{ Math.ceil(serie.vote_average / 2) }}
+                </div>
+                <div>
+                <i v-for="x in ( Math.ceil(serie.vote_average / 2)) " :key="x" class="fa-solid fa-star"></i>
+                <i v-for="x in (5 - Math.ceil(serie.vote_average / 2)) " :key="x" class="fa-regular fa-star"></i>
+              </div>
               </li>
 
             </ul>
@@ -146,6 +165,10 @@ export default {
 @import "bootstrap/scss/bootstrap";
 
 img {
-  max-width: 50px;
+  max-width: 100%;
+
+  &.flag-img {
+    max-width: 50px;
+  }
 }
 </style>
