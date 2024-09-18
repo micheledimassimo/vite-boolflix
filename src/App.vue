@@ -1,6 +1,6 @@
 <script>
 import axios from 'axios';
-import AppHeader from './components/AppHeader.vue';
+
 
 export default {
   data() {
@@ -10,11 +10,11 @@ export default {
       movies: [],
       series: [],
       basicImgUrl: 'https://image.tmdb.org/t/p/',
-      basicImgSize: 'w185'
+      basicImgSize: 'w342'
     }
   },
   components: {
-    AppHeader
+    
   },
   methods: {
     search() {
@@ -77,23 +77,26 @@ export default {
 <template>
   <div>
    
-    <AppHeader />
+    <header class="d-flex justify-content-between p-4">
+      <h1>
+        Boolflix
+      </h1>
+      <div>
+        <input @keyup.enter="search" class="form-control" v-model="searchText" type="text" placeholder="Cerca film o serie TV">
+        
+      </div>
+    </header>
     
     <main>
-      <div>
-        <input v-model="searchText" type="text" placeholder="Cerca film o serie TV">
-        <button @click="search">
-          Cerca
-        </button>
-      </div>
+      
 
-      <div>
+      <div class="my-container">
         <h2>
           Movies
         </h2>
-        <ol>
-          <li v-for="(movie, i) in movies " :key="i">
-            <ul>
+        <ol class="my-row">
+          <li class="my-col-1-4"  v-for="(movie, i) in movies " :key="i">
+            <ul >
               <li>
                 <img :src="basicImgUrl + basicImgSize + movie.poster_path" :alt="movie.title">
               </li>
@@ -110,7 +113,7 @@ export default {
                   Voto: {{ Math.ceil(movie.vote_average / 2) }}
               </div>
               <div>
-                <i v-for="x in ( Math.ceil(movie.vote_average / 2)) " :key="x" class="fa-solid fa-star"></i>
+                <i v-for="x in ( Math.ceil(movie.vote_average / 2)) " :key="x" class="fa-solid fa-star stars"></i>
                 <i v-for="x in (5 - Math.ceil(movie.vote_average / 2)) " :key="x" class="fa-regular fa-star"></i>
               </div>
 
@@ -125,8 +128,8 @@ export default {
         <h2>
           Series
         </h2>
-        <ol>
-          <li v-for="(serie, i) in series " :key="i">
+        <ol class="my-row">
+          <li class="my-col-1-4"  v-for="(movie, i) in movies " :key="i">
             <ul>
               <li>
                 <img :src="basicImgUrl + basicImgSize + serie.poster_path" :alt="serie.title">
@@ -145,7 +148,7 @@ export default {
                   Voto: {{ Math.ceil(serie.vote_average / 2) }}
                 </div>
                 <div>
-                <i v-for="x in ( Math.ceil(serie.vote_average / 2)) " :key="x" class="fa-solid fa-star"></i>
+                <i v-for="x in ( Math.ceil(serie.vote_average / 2)) " :key="x" class="fa-solid fa-star stars"></i>
                 <i v-for="x in (5 - Math.ceil(serie.vote_average / 2)) " :key="x" class="fa-regular fa-star"></i>
               </div>
               </li>
@@ -163,12 +166,38 @@ export default {
 @use 'assets/scss/main' as *;
 // Import all of Bootstrap's CSS
 @import "bootstrap/scss/bootstrap";
-
+* {
+  background-color: $mainBgColor;
+}
+h1 {
+  color: red;
+}
 img {
   max-width: 100%;
-
+  object-fit: cover;
   &.flag-img {
     max-width: 50px;
   }
 }
+.my-container {
+  h2 {
+    color: white;
+  }
+  ol {
+    list-style: none;
+    li > ul {
+      list-style: none;
+      li {
+        font-size: 0.85rem;
+        color: white;
+        > div {
+          &.stars {
+            color: white;
+          }
+        }
+      }
+    }
+  }
+}
+
 </style>
